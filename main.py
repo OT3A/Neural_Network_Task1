@@ -105,9 +105,9 @@ def main(class1, class2, feature1, feature2, epochs=100, eta=0.05, bias=0):
 
     weights, accuracy = train(data.loc[data['species'] == class1], data.loc[data['species'] == class2], feature1, feature2, epochs, eta, bias)
     print(f'weights = \n{weights}\naccuracy = {accuracy}')
-    with open('accuracy.txt', 'a') as f:
-        f.write(f'classes ({class1}, {class2}), features ({feature1}, {feature2}), accuracy ({accuracy})\n')
-    return accuracy
+    # with open('accuracy.txt', 'a') as f:
+    #     f.write(f'classes ({class1}, {class2}), features ({feature1}, {feature2}), accuracy ({accuracy})\n')
+    # return accuracy
 
 if __name__ == '__main__':
     main('Adelie', 'Chinstrap', 'bill_depth_mm', 'bill_length_mm')
