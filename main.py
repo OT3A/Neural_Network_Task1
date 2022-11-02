@@ -87,7 +87,7 @@ def train(c1, c2, f1, f2, epochs, eta, bias):
     line = []
     for _, row in x.iterrows():
         # line.append(np.array((np.dot(weights, row))))
-        line.append(np.array(sig(np.dot(weights, row))))
+        line.append(round(sig(np.dot(weights, row))))
 
     line = [-1 if i == 0 else i for i in line]
     xLine = [i for i in range(x.shape[0])]
