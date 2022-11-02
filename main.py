@@ -3,31 +3,39 @@ from numpy import NaN
 import numpy as np
 import pandas as pd
 import csv
-from sklearn.preprocessing import LabelEncoder
-from sklearn.model_selection import train_test_split
 import pathlib
 import cv2
+from sympy import true
 from calendar import month
 from re import X
-from sklearn.preprocessing import LabelEncoder
 import seaborn as sns
 import matplotlib.pyplot as plt
-from sklearn import linear_model
-from sklearn import metrics
-from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import PolynomialFeatures
-from sympy import true
+from sklearn import linear_model, metrics
+from sklearn.metrics import mean_absolute_error, confusion_matrix, r2_score, accuracy_score
 from sklearn.datasets import make_regression
 from sklearn.linear_model import LinearRegression
-from sklearn.metrics import mean_absolute_error
-from sklearn.feature_selection import SelectKBest
-from sklearn.feature_selection import mutual_info_regression
-from sklearn.metrics import r2_score, accuracy_score
+from sklearn.preprocessing import PolynomialFeatures, LabelEncoder
+from sklearn.model_selection import train_test_split
+from sklearn.feature_selection import SelectKBest, mutual_info_regression
 
 
 def sig(x):
     return 1 / (1 + np.exp(-x))
 
+def confusionMatrix(y_test, prediction):
+    matrix = np.zeros((2,2))
+    original = y_test.tolist()
+    for i in range(len(original)):
+        if original[i] == 1 and prediction[i] == 1:
+            matrix[1,1]+=1 #True True
+        elif original[i] == -1 and prediction[i] == 1:
+            matrix[0,1]+=1 #False True
+        elif original[i] == 1 and prediction[i] == -1:
+            matrix[1,0]+=1 #True False
+        elif original[i] == -1 and prediction[i] == -1:
+            matrix[0,0]+=1 #False False
+    matrix = matrix.astype(int)
+    return matrix
 
 def initializeWeight(X):
     return pd.Series(np.random.rand(X))
@@ -64,6 +72,18 @@ def train(c1, c2, f1, f2, epochs, eta, bias):
     print(f'prediction = {prediction}\ny test     = {y_test.tolist()}')
     print(f'r2 accuracy = {r2_score(y_test, prediction)}')
     print(f'accuracy = {accuracy_score(y_test, prediction)}')
+
+    builtcm = confusion_matrix(y_test, prediction)
+    cm = confusionMatrix(y_test, prediction)
+    print(f'confusion_matrix = {builtcm}')
+    print(f'our confusion_matrix = {cm}')
+    plt.figure(figsize = (10,8))
+    # were 'cmap' is used to set the accent colour
+    sns.heatmap(cm, annot=True, cmap= 'flare',  fmt='d', cbar=True)
+    plt.xlabel('Predicted_Label')
+    plt.ylabel('Truth_Label')
+    plt.title('Confusion Matrix')
+    plt.show()
 
     line = []
     for _, row in x.iterrows():
