@@ -27,13 +27,13 @@ def confusionMatrix(y_test, prediction):
     original = y_test.tolist()
     for i in range(len(original)):
         if original[i] == 1 and prediction[i] == 1:
-            matrix[1,1]+=1 #True True
+            matrix[1,1] += 1 #True True
         elif original[i] == -1 and prediction[i] == 1:
-            matrix[0,1]+=1 #False True
+            matrix[0,1] += 1 #False True
         elif original[i] == 1 and prediction[i] == -1:
-            matrix[1,0]+=1 #True False
+            matrix[1,0] += 1 #True False
         elif original[i] == -1 and prediction[i] == -1:
-            matrix[0,0]+=1 #False False
+            matrix[0,0] += 1 #False False
     matrix = matrix.astype(int)
     return matrix
 
@@ -78,7 +78,6 @@ def train(c1, c2, f1, f2, epochs, eta, bias):
     print(f'confusion_matrix = {builtcm}')
     print(f'our confusion_matrix = {cm}')
     plt.figure(figsize = (10,8))
-    # were 'cmap' is used to set the accent colour
     sns.heatmap(cm, annot=True, cmap= 'flare',  fmt='d', cbar=True)
     plt.xlabel('Predicted_Label')
     plt.ylabel('Truth_Label')
@@ -87,8 +86,10 @@ def train(c1, c2, f1, f2, epochs, eta, bias):
 
     line = []
     for _, row in x.iterrows():
-        line.append(np.array((np.dot(weights, row))))
-    # line = [-1 if i == 0 else i for i in line]
+        # line.append(np.array((np.dot(weights, row))))
+        line.append(np.array(sig(np.dot(weights, row))))
+
+    line = [-1 if i == 0 else i for i in line]
     xLine = [i for i in range(x.shape[0])]
     plt.scatter(c1[[f1]], c1[[f2]])
     plt.scatter(c2[[f1]], c2[[f2]])
@@ -127,7 +128,7 @@ def main(class1, class2, feature1, feature2, epochs=100, eta=0.05, bias=0):
     print(f'weights = \n{weights}\naccuracy = {accuracy}')
     # with open('accuracy.txt', 'a') as f:
     #     f.write(f'classes ({class1}, {class2}), features ({feature1}, {feature2}), accuracy ({accuracy})\n')
-    # return accuracy
+    return accuracy
 
 if __name__ == '__main__':
     main('Adelie', 'Chinstrap', 'bill_depth_mm', 'bill_length_mm')
