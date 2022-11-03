@@ -38,7 +38,11 @@ def confusionMatrix(y_test, prediction):
     return matrix
 
 def initializeWeight(X):
-    return pd.Series(np.random.rand(X))
+    # return pd.Series(np.random.rand(X))
+    x = [np.random.uniform(0.00001, 10**(-20)) for i in range(X)]
+    # return pd.Series(np.random.rand(X))
+    x = pd.Series(x)
+    return x
 
 def train(c1, c2, f1, f2, epochs, eta, bias):
     weights = initializeWeight(3)
@@ -84,16 +88,26 @@ def train(c1, c2, f1, f2, epochs, eta, bias):
     plt.title('Confusion Matrix')
     plt.show()
 
+    xmin = x[f1].min()
+    xmax = x[f1].max()
+    xline = [xmin, xmax]
     line = []
-    for _, row in x.iterrows():
-        # line.append(np.array((np.dot(weights, row))))
-        line.append(round(sig(np.dot(weights, row))))
+    line.append(- (weights[1] * xline[0] + weights[0]) / weights[2] if bias == 1 else - (weights[1] * xline[0]) / weights[2])
+    line.append(- (weights[1] * xline[1] + weights[0]) / weights[2] if bias == 1 else - (weights[1] * xline[1]) / weights[2])
+    # print(f'line = {line}')
+    # print(f'xline = {xline}')
+    # print(f'weight = {weights[1]}')
+    # line = []
+    # for _, row in x.iterrows():
+    #     # line.append(np.array((np.dot(weights, row))))
+    #     line.append(round(sig(np.dot(weights, row))))
 
-    line = [-1 if i == 0 else i for i in line]
-    xLine = [i for i in range(x.shape[0])]
+    # line = [-1 if i == 0 else i for i in line]
+    # xline = [i for i in range(x.shape[0])]
+    
     plt.scatter(c1[[f1]], c1[[f2]])
     plt.scatter(c2[[f1]], c2[[f2]])
-    plt.plot(xLine, line)
+    plt.plot(xline, line)
     plt.show()
 
     return weights, accuracy_score(y_test, prediction)
