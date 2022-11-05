@@ -55,7 +55,12 @@ def train(c1, c2, f1, f2, epochs, eta, bias):
     x0 = np.ones(x.shape[0]) if bias == 1 else np.zeros(x.shape[0])
     x0 = pd.DataFrame(x0, columns = ['bias'])
     x = pd.concat([x0, x], axis=1)
-    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.40, shuffle=True)
+    x_train1, x_test1, y_train1, y_test1 = train_test_split(x[:50], y[:50], test_size=0.40, shuffle=True)
+    x_train2, x_test2, y_train2, y_test2 = train_test_split(x[50:], y[50:], test_size=0.40, shuffle=True)
+    x_train = pd.concat([x_train1, x_train2], axis=0, ignore_index=True)
+    x_test = pd.concat([x_test1, x_test2], axis=0, ignore_index=True)
+    y_train = pd.concat([y_train1, y_train2], axis=0, ignore_index=True)
+    y_test = pd.concat([y_test1, y_test2], axis=0, ignore_index=True)
     for i in range(epochs):
         for index, row in x_train.iterrows():
             equation = np.dot(weights, row)
