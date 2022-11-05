@@ -117,7 +117,7 @@ def train(c1, c2, f1, f2, epochs, eta, bias):
 
     return weights, accuracy_score(y_test, prediction)
 
-def main(class1, class2, feature1, feature2, epochs=100, eta=0.05, bias=0):
+def main(class1, class2, feature1, feature2, epochs=1000, eta=0.05, bias=0):
     data = pd.read_csv('penguins.csv')
     i = data['gender'].value_counts()
 
